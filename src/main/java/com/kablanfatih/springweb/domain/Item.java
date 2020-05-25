@@ -28,4 +28,8 @@ public class Item {
         this.type = type;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
