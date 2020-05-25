@@ -2,18 +2,19 @@ package com.kablanfatih.springweb.service;
 
 import com.kablanfatih.springweb.domain.Item;
 import com.kablanfatih.springweb.domain.ItemAddForm;
+import com.kablanfatih.springweb.domain.User;
 import com.kablanfatih.springweb.repository.ItemRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository repository;
-    //private final ItemService service;
+    private final UserService userService;
 
     @Override
     public void addItem(ItemAddForm form) {
@@ -33,6 +34,19 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItemById(long id) {
         repository.deleteById(id);
+    }
+
+    public Object getItemById(long id) {
+        return repository.findById(id);
+    }
+    public Item assignItem(String username, long itemId) {
+        User user = userService.getUserByUsername(username);
+        Item item = (Item) getItemById(itemId);
+        Set<Item> itemList = user.getItems();
+        itemList.add(item);
+        user.setItems(itemList);
+        item.setUser(user);
+        return repository.save(item);
     }
 }
 
