@@ -1,8 +1,10 @@
 package com.kablanfatih.springweb.service;
 
+import com.kablanfatih.springweb.domain.Item;
 import com.kablanfatih.springweb.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -14,5 +16,7 @@ public interface UserService {
 
     User getUserByUsername(String username);
 
+    Object getUserById(long id);
 
+    Map<String, List<Item>> numberOfItemsByType(long userId);
 }

@@ -6,11 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,5 +36,13 @@ public class UserController {
     @RequestMapping("/users")
     public ModelAndView getUsersPage() {
         return new ModelAndView("users", "users", userService.getUsers());
+    }
+
+    @RequestMapping(value = "/users/{id}/items")
+    public ModelAndView getUserPage(@PathVariable Long id) {
+        if (null == userService.getUserById(id))
+            throw new NoSuchElementException("User with id:" + id + " not found");
+        else
+            return new ModelAndView("user-items", "items", userService.numberOfItemsByType(id));
     }
 }

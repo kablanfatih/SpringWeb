@@ -22,8 +22,6 @@ public class ItemServiceImpl implements ItemService {
             String inventoryCode = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(10);
             Item item = new Item(inventoryCode, form.getItemType());
             repository.save(item);
-            System.out.println(repository.findById(item.getId()));
-
         }
     }
 
@@ -31,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
     public Iterable<Item> getItems() {
         return repository.findAll();
     }
+
     @Override
     public void deleteItemById(long id) {
         repository.deleteById(id);
@@ -39,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
     public Object getItemById(long id) {
         return repository.findById(id);
     }
+
     public Item assignItem(String username, long itemId) {
         User user = userService.getUserByUsername(username);
         Item item = (Item) getItemById(itemId);

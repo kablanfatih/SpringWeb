@@ -1,12 +1,12 @@
 package com.kablanfatih.springweb.service;
 
+import com.kablanfatih.springweb.domain.Item;
 import com.kablanfatih.springweb.domain.User;
 import com.kablanfatih.springweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +34,25 @@ public class UserServiceImpl implements UserService {
 
     public User getUserByUsername(String username) {
         return repository.findByUsername(username);
+    }
+
+    @Override
+    public User getUserById(long id) {
+        return repository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public Map<String, List<Item>> numberOfItemsByType(long userId) {
+        Map<String, List<Item>> map = new HashMap<String, List<Item>>();
+        Set<Item> items = getUserById(userId).getItems();
+        for (Item item : items) {
+            List<Item> itemList = new ArrayList<Item>();
+            String key = item.getType().toLowerCase();
+            if (map.containsKey(key))
+                itemList = map.get(key);
+            itemList.add(item);
+            map.put(key, itemList);
+        }
+        return map;
     }
 }
